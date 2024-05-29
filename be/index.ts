@@ -3,6 +3,7 @@ import express, { Request, Response } from "express";
 import * as sqlite3 from "sqlite3";
 import { existsSync } from "fs";
 import { v4 as uuidv4 } from "uuid";
+
 interface User {
   GUID: number;
   name: string;
@@ -39,6 +40,7 @@ app.get("/users", async (req: Request, res: Response) => {
     res.status(500).json({ error: "An error occurred while fetching users." });
   }
 });
+
 app.post("/users", async (req: Request, res: Response) => {
   const { FullName, PicturePath } = req.body;
 
@@ -57,8 +59,27 @@ app.post("/users", async (req: Request, res: Response) => {
       .json({ error: "An error occurred while creating the user." });
   }
 });
-app.get("/users/:guid", (req: Request, res: Response) => {
-  // Fetch a specific user
+
+app.get("/users/:guid", async (req: Request, res: Response) => {
+  const { guid } = req.params;
+
+  if (!guid) {
+    return res.status(400).json({ error: "Request missing user GUID." });
+  }
+
+  try {
+    const sql = "SELECT * FROM users WHERE GUID = ?";
+    const user = await db.get(sql, [guid]);
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found." });
+    }
+
+    res.json(user);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "An error occurred while fetching the user." });
+  }
 });
 app.put("/users/:guid", (req: Request, res: Response) => {
   // Update a specific user
