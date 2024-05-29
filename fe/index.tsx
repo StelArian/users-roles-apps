@@ -18,6 +18,12 @@ const App = () => (
         <Apps />
       </div>
     </div>
+    <div className="buttons">
+      <div></div>
+      <div style={{textAlign:"left"}}><button>Join selected to Users+Roles</button></div>
+      <div style={{textAlign:"right"}}><button>Join selected to Roles+Apps</button></div>
+      <div></div>
+    </div>
   </div>
 );
 

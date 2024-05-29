@@ -16,12 +16,12 @@ export default () => {
     <div className="dataTable">
       <h1>Apps<span>+</span></h1>
       <div>
-        {feed.map((user) => (
-          <div key={user.GUID}>
-            <div>{user.GUID}</div>
-            <div>{user.Name}</div>
-            <div>{user.iconPath}</div>
-            <div>{user.URL}</div>
+        {feed.map((item) => (
+          <div key={item.GUID}>
+            <div title={item.GUID}>{item.GUID}</div>
+            <div title={item.Name}>{item.Name}</div>
+            <div title={item.iconPath}>{item.iconPath}</div>
+            <div title={item.URL}>{item.URL}</div>
             <div><input type="checkbox" /></div>
             <div>🗑</div>
             <div>✏️</div>
