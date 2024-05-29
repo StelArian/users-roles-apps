@@ -26,14 +26,14 @@ entity "User_Role" as user_role {
   + RoleGUID : string
 }
 
-entity "Role_App" as role_application {
+entity "Role_App" as role_app {
   + RoleGUID : string
-  + ApplicationGUID : string
+  + AppGUID : string
 }
 
 user ||..o{ user_role
 role ||..o{ user_role
-role ||..o{ role_application
-application ||..o{ role_application
+role ||..o{ role_app
+application ||..o{ role_app
 
 @enduml

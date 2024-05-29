@@ -1,11 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { Provider } from "react-redux";
 import "./index.scss";
 import Users from "./users";
 import Roles from "./roles";
 import Apps from "./apps";
+import { store } from "./store";
 
 const App = () => (
+  <Provider store={store}>
   <div>
     <div className="grid">
       <div>
@@ -25,6 +28,7 @@ const App = () => (
       <div></div>
     </div>
   </div>
+  </Provider>
 );
 
 const root = document.getElementById("root");

@@ -5,14 +5,9 @@ import { existsSync } from "fs";
 import { v4 as uuidv4 } from "uuid";
 import fs from 'fs';
 import cors from 'cors';
+import { User, Role, App } from "../common";
 
 const config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
-
-interface User {
-  GUID: number;
-  name: string;
-  email: string;
-}
 
 // Open the database
 const dbPath = "./be/sqlite/data.db";
@@ -64,6 +59,7 @@ app.post("/users", async (req: Request, res: Response) => {
     res
       .status(500)
       .json({ error: "An error occurred while creating the user." });
+      // TODO: for simplicity GUID collision is not handled.
   }
 });
 
