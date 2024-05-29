@@ -1,31 +1,35 @@
-import sqlite3 from 'sqlite3';
-// import { open } from 'sqlite';
+import { open, Database } from "sqlite";
 import express, { Request, Response } from "express";
-
+import * as sqlite3 from "sqlite3";
 interface User {
   id: number;
   name: string;
   email: string;
 }
 
+// Open the database
+const dbPath = "./be/sqlite/data.db";
+let db: Database;
+open({
+  filename: dbPath,
+  driver: sqlite3.Database,
+}).then((database) => {
+  db = database;
+  console.log("Connected to the users database.");
+});
+
 const app = express();
 app.use(express.json());
 
 // User APIs
-app.get("/users", (req: Request, res: Response) => {
-  const users = [
-    { id: 1, name: "John Doe", email: "john.doe@example.com" },
-    { id: 2, name: "Jane Smith", email: "jane.smith@example.com" },
-    { id: 3, name: "Robert Johnson", email: "robert.johnson@example.com" },
-    { id: 4, name: "Michael Brown", email: "michael.brown@example.com" },
-    { id: 5, name: "Emily Davis", email: "emily.davis@example.com" },
-    { id: 6, name: "Sarah Miller", email: "sarah.miller@example.com" },
-    { id: 7, name: "Jessica Wilson", email: "jessica.wilson@example.com" },
-    { id: 8, name: "Thomas Moore", email: "thomas.moore@example.com" },
-    { id: 9, name: "Daniel Taylor", email: "daniel.taylor@example.com" },
-    { id: 10, name: "Susan Anderson", email: "susan.anderson@example.com" },
-  ];
-  res.json(users);
+app.get("/users", async (req: Request, res: Response) => {
+  try {
+    const users: User[] = await db.all("SELECT * FROM users");
+    res.json(users);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "An error occurred while fetching users." });
+  }
 });
 app.post("/users", (req: Request, res: Response) => {
   // Add a new user

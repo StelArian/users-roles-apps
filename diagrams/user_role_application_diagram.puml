@@ -3,9 +3,8 @@
 entity "User" as user {
   + GUID : string
   --
-  FirstName : string
-  LastName : string
-  Picture : string
+  FullName : string
+  PicturePath : string
 }
 
 entity "Role" as role {
@@ -18,7 +17,7 @@ entity "Application" as application {
   + GUID : string
   --
   Name : string
-  Icon : string
+  IconPath : string
   URL : string
 }
 

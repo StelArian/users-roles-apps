@@ -1,0 +1,139 @@
+import { open, Database } from "sqlite";
+import * as sqlite3 from "sqlite3";
+import { existsSync, mkdirSync, unlinkSync } from "fs";
+import { v4 as uuidv4 } from "uuid";
+
+const folder = "sqlite";
+const dbPath = `./be/${folder}/data.db`;
+
+if (!existsSync(folder)) {
+  mkdirSync(folder);
+}
+
+if (existsSync(dbPath)) {
+  unlinkSync(dbPath);
+}
+
+async function seed(db: Database) {
+  await db.run(`
+    CREATE TABLE Users (
+      GUID TEXT PRIMARY KEY,
+      FullName TEXT,
+      PicturePath TEXT
+    );
+  `);
+
+  const users = [
+    {
+      GUID: uuidv4(),
+      FullName: "James T. Kirk",
+      PicturePath: "kirk.jpg",
+    },
+    { GUID: uuidv4(), FullName: "Spock", PicturePath: "spock.jpg" },
+    {
+      GUID: uuidv4(),
+      FullName: "Leonard McCoy",
+      PicturePath: "mccoy.jpg",
+    },
+    {
+      GUID: uuidv4(),
+      FullName: "Montgomery Scott",
+      PicturePath: "scott.jpg",
+    },
+    { GUID: uuidv4(), FullName: "Uhura", PicturePath: "uhura.jpg" },
+    {
+      GUID: uuidv4(),
+      FullName: "Hikaru Sulu",
+      PicturePath: "sulu.jpg",
+    },
+    {
+      GUID: uuidv4(),
+      FullName: "Pavel Chekov",
+      PicturePath: "chekov.jpg",
+    },
+    {
+      GUID: uuidv4(),
+      FullName: "Jean-Luc Picard",
+      PicturePath: "picard.jpg",
+    },
+    {
+      GUID: uuidv4(),
+      FullName: "William Riker",
+      PicturePath: "riker.jpg",
+    },
+    { GUID: uuidv4(), FullName: "Data", PicturePath: "data.jpg" },
+    {
+      GUID: uuidv4(),
+      FullName: "Geordi La Forge",
+      PicturePath: "laforge.jpg",
+    },
+    { GUID: uuidv4(), FullName: "Worf", PicturePath: "worf.jpg" },
+    {
+      GUID: uuidv4(),
+      FullName: "Deanna Troi",
+      PicturePath: "troi.jpg",
+    },
+    {
+      GUID: uuidv4(),
+      FullName: "Beverly Crusher",
+      PicturePath: "crusher.jpg",
+    },
+    {
+      GUID: uuidv4(),
+      FullName: "Wesley Crusher",
+      PicturePath: "wesley.jpg",
+    },
+  ];
+
+  for (const user of users) {
+    await db.run(
+      `INSERT INTO Users (GUID, FullName, PicturePath) VALUES (?, ?, ?)`,
+      [user.GUID, user.FullName, user.PicturePath]
+    );
+  }
+
+  await db.run(`
+    CREATE TABLE Roles (
+      GUID TEXT PRIMARY KEY,
+      Name TEXT
+    );
+  `);
+
+  await db.run(`
+    CREATE TABLE Apps (
+      GUID TEXT PRIMARY KEY,
+      Name TEXT,
+      IconPath TEXT,
+      URL TEXT
+    );
+  `);
+
+  await db.run(`
+    CREATE TABLE User_Role (
+      UserGUID TEXT,
+      RoleGUID TEXT,
+      PRIMARY KEY(UserGUID, RoleGUID),
+      FOREIGN KEY(UserGUID) REFERENCES User(GUID),
+      FOREIGN KEY(RoleGUID) REFERENCES Role(GUID)
+    );
+  `);
+
+  await db.run(`
+    CREATE TABLE Role_App (
+      RoleGUID TEXT,
+      ApplicationGUID TEXT,
+      PRIMARY KEY(RoleGUID, ApplicationGUID),
+      FOREIGN KEY(RoleGUID) REFERENCES Role(GUID),
+      FOREIGN KEY(ApplicationGUID) REFERENCES Application(GUID)
+    );
+  `);
+}
+
+open({
+  filename: dbPath,
+  driver: sqlite3.Database,
+}).then((database) => {
+  seed(database).then(() => {
+    console.log("Database seeded successfully.");
+  });
+});
