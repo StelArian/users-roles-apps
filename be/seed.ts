@@ -3,8 +3,8 @@ import * as sqlite3 from "sqlite3";
 import { existsSync, mkdirSync, unlinkSync } from "fs";
 import { v4 as uuidv4 } from "uuid";
 
-const folder = "sqlite";
-const dbPath = `./be/${folder}/data.db`;
+const folder = "./be/sqlite";
+const dbPath = `${folder}/data.db`;
 
 if (!existsSync(folder)) {
   mkdirSync(folder);
