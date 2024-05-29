@@ -3,6 +3,9 @@ import express, { Request, Response } from "express";
 import * as sqlite3 from "sqlite3";
 import { existsSync } from "fs";
 import { v4 as uuidv4 } from "uuid";
+import fs from 'fs';
+
+const config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
 
 interface User {
   GUID: number;
@@ -183,4 +186,4 @@ app.delete("/applications/:guid", (req: Request, res: Response) => {
   // Delete a specific application
 });
 
-app.listen(3080, () => console.log("Server running on port 3080"));
+app.listen(config.port.be, () => console.log(`Server running on port ${config.port.be}`));
