@@ -1,3 +1,5 @@
+import sqlite3 from 'sqlite3';
+// import { open } from 'sqlite';
 import express, { Request, Response } from "express";
 
 interface User {
