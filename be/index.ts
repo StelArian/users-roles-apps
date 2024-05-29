@@ -4,6 +4,7 @@ import * as sqlite3 from "sqlite3";
 import { existsSync } from "fs";
 import { v4 as uuidv4 } from "uuid";
 import fs from 'fs';
+import cors from 'cors';
 
 const config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
 
@@ -31,6 +32,7 @@ open({
 });
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 // User APIs

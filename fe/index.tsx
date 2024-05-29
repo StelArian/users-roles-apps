@@ -1,8 +1,24 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import "./index.scss";
+import Users from "./users";
+import Roles from "./roles";
+import Apps from "./apps";
 
 const App = () => (
-  <h1>hello</h1>
+  <div>
+    <div className="grid">
+      <div>
+        <Users />
+      </div>
+      <div>
+        <Roles />
+      </div>
+      <div>
+        <Apps />
+      </div>
+    </div>
+  </div>
 );
 
 const root = document.getElementById("root");

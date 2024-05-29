@@ -1,0 +1,62 @@
+body {
+  font-family: Arial, sans-serif;
+  font-size: small;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+
+  > div {
+    background-color: #ddd;
+    padding: 1rem;
+    border-radius: 0.5rem;
+  }
+}
+
+.dataTable {
+  > h1 {
+    > span {
+      margin-left: 1em;
+      cursor: pointer;
+    }
+  }
+  > div {
+    display: flex;
+    flex-direction: column;
+
+    > div {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.2rem;
+      border-bottom: 1px solid #ddd;
+
+      &:nth-child(odd) {
+        background-color: #f9f9f9;
+      }
+
+      > div {
+        flex: 4;
+        padding: 0.2rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        &:first-child {
+          flex: 2;
+        }
+
+        &:nth-last-child(-n + 3) {
+          flex: 1;
+          text-align: center;
+          cursor: pointer;
+
+          > input {
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+}
