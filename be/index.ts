@@ -2,8 +2,9 @@ import { open, Database } from "sqlite";
 import express, { Request, Response } from "express";
 import * as sqlite3 from "sqlite3";
 import { existsSync } from "fs";
+import { v4 as uuidv4 } from "uuid";
 interface User {
-  id: number;
+  GUID: number;
   name: string;
   email: string;
 }
@@ -38,8 +39,23 @@ app.get("/users", async (req: Request, res: Response) => {
     res.status(500).json({ error: "An error occurred while fetching users." });
   }
 });
-app.post("/users", (req: Request, res: Response) => {
-  // Add a new user
+app.post("/users", async (req: Request, res: Response) => {
+  const { FullName, PicturePath } = req.body;
+
+  if (!FullName || !PicturePath) {
+    return res.status(400).json({ error: "Request missing FullName or PicturePath." });
+  }
+
+  try {
+    const sql = `INSERT INTO users (GUID, FullName, PicturePath) VALUES (?, ?, ?)`;
+    await db.run(sql, [uuidv4(), FullName, PicturePath]);
+    res.status(201).json({ message: "User created successfully." });
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ error: "An error occurred while creating the user." });
+  }
 });
 app.get("/users/:guid", (req: Request, res: Response) => {
   // Fetch a specific user
