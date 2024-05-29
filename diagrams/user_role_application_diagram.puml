@@ -1,19 +1,19 @@
 @startuml
 
-entity "User" as user {
+entity "Users" as user {
   + GUID : string
   --
   FullName : string
   PicturePath : string
 }
 
-entity "Role" as role {
+entity "Roles" as role {
   + GUID : string
   --
   Name : string
 }
 
-entity "Application" as application {
+entity "Apps" as application {
   + GUID : string
   --
   Name : string
@@ -26,7 +26,7 @@ entity "User_Role" as user_role {
   + RoleGUID : string
 }
 
-entity "Role_Application" as role_application {
+entity "Role_App" as role_application {
   + RoleGUID : string
   + ApplicationGUID : string
 }

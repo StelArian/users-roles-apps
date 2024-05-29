@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "start": "echo 'To start API: yarn api'",
     "api": "nodemon be/index.ts",
     "seed": "ts-node be/seed.ts"
   },

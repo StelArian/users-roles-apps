@@ -11,7 +11,9 @@ interface User {
 // Open the database
 const dbPath = "./be/sqlite/data.db";
 if (!existsSync(dbPath)) {
-  throw new Error(`Database file not found at "${dbPath}". Please run 'yarn seed' to create.`);
+  throw new Error(
+    `Database file not found at "${dbPath}". Please run 'yarn seed' to create.`
+  );
 }
 
 let db: Database;
@@ -20,7 +22,7 @@ open({
   driver: sqlite3.Database,
 }).then((database) => {
   db = database;
-  console.log("Connected to the users database.");
+  console.log("Connected to the sqlite database.");
 });
 
 const app = express();
@@ -50,8 +52,14 @@ app.delete("/users/:guid", (req: Request, res: Response) => {
 });
 
 //  Role APIs
-app.get("/roles", (req: Request, res: Response) => {
-  // Fetch all roles
+app.get("/roles", async (req: Request, res: Response) => {
+  try {
+    const users: User[] = await db.all("SELECT * FROM roles");
+    res.json(users);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "An error occurred while fetching roles." });
+  }
 });
 app.post("/roles", (req: Request, res: Response) => {
   // Add a new role
@@ -66,9 +74,15 @@ app.delete("/roles/:guid", (req: Request, res: Response) => {
   // Delete a specific role
 });
 
-//  Application APIs
-app.get("/applications", (req: Request, res: Response) => {
-  // Fetch all applications
+//  App APIs
+app.get("/apps", async (req: Request, res: Response) => {
+  try {
+    const users: User[] = await db.all("SELECT * FROM apps");
+    res.json(users);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "An error occurred while fetching apps." });
+  }
 });
 app.post("/applications", (req: Request, res: Response) => {
   // Add a new application
