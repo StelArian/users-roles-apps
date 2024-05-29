@@ -17,12 +17,12 @@ export interface App {
   URL: string;
 }
 
-export interface User_Role {
+export interface UserRole {
   UserGUID: string;
   RoleGUID: string;
 }
 
-export interface Role_App {
+export interface RoleApp {
   RoleGUID: string;
-  ApplicationGUID: string;
+  AppGUID: string;
 }

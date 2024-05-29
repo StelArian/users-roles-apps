@@ -17,7 +17,7 @@ export default () => {
 
   return (
     <div className="dataTable">
-      <h1>Apps<span>+</span></h1>
+      <h1>Apps<span title="Add app">+</span></h1>
       <div>
         {apps.map((item) => (
           <div key={item.GUID}>

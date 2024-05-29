@@ -1,17 +1,21 @@
 import { configureStore, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { App, Role, User } from "../common";
+import { App, Role, RoleApp, User, UserRole } from "../common";
 
 interface propsState {
   users: User[];
   roles: Role[];
   apps: App[];
+  user_role: UserRole[];
+  role_app: RoleApp[];
 }
 
 const initialState: propsState = {
   users: [],
   roles: [],
   apps: [],
+  user_role: [],
+  role_app: [],
 };
 
 const propsSlice = createSlice({
@@ -26,6 +30,12 @@ const propsSlice = createSlice({
     },
     gotApps: (state, action: PayloadAction<App[]>) => {
       state.apps = action.payload;
+    },
+    gotUserRole: (state, action: PayloadAction<UserRole[]>) => {
+      state.user_role = action.payload;
+    },
+    gotRoleApp: (state, action: PayloadAction<RoleApp[]>) => {
+      state.role_app = action.payload;
     },
   },
 });

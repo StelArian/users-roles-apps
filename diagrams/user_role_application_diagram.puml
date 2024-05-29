@@ -13,7 +13,7 @@ entity "Roles" as role {
   Name : string
 }
 
-entity "Apps" as application {
+entity "Apps" as app {
   + GUID : string
   --
   Name : string
@@ -34,6 +34,6 @@ entity "Role_App" as role_app {
 user ||..o{ user_role
 role ||..o{ user_role
 role ||..o{ role_app
-application ||..o{ role_app
+app ||..o{ role_app
 
 @enduml
