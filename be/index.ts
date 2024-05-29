@@ -1,6 +1,7 @@
 import { open, Database } from "sqlite";
 import express, { Request, Response } from "express";
 import * as sqlite3 from "sqlite3";
+import { existsSync } from "fs";
 interface User {
   id: number;
   name: string;
@@ -9,6 +10,10 @@ interface User {
 
 // Open the database
 const dbPath = "./be/sqlite/data.db";
+if (!existsSync(dbPath)) {
+  throw new Error(`Database file not found at "${dbPath}". Please run 'yarn seed' to create.`);
+}
+
 let db: Database;
 open({
   filename: dbPath,
