@@ -4,16 +4,22 @@ import { App, Role, RoleApp, User, UserRole } from "../common";
 
 interface propsState {
   users: User[];
+  users_selected: User[];
   roles: Role[];
+  roles_selected: Role[];
   apps: App[];
+  apps_selected: App[];
   user_role: UserRole[];
   role_app: RoleApp[];
 }
 
 const initialState: propsState = {
   users: [],
+  users_selected: [],
   roles: [],
+  roles_selected: [],
   apps: [],
+  apps_selected: [],
   user_role: [],
   role_app: [],
 };
@@ -36,6 +42,30 @@ const propsSlice = createSlice({
     },
     gotRoleApp: (state, action: PayloadAction<RoleApp[]>) => {
       state.role_app = action.payload;
+    },
+    usersSelectedRm: (state, action: PayloadAction<User>) => {
+      state.users_selected = state.users_selected.filter(
+        (us) => us.GUID !== action.payload.GUID
+      );
+    },
+    usersSelectedAdd: (state, action: PayloadAction<User>) => {
+      state.users_selected.push(action.payload);
+    },
+    rolesSelectedRm: (state, action: PayloadAction<Role>) => {
+      state.roles_selected = state.roles_selected.filter(
+        (rs) => rs.GUID !== action.payload.GUID
+      );
+    },
+    rolesSelectedAdd: (state, action: PayloadAction<Role>) => {
+      state.roles_selected.push(action.payload);
+    },
+    appsSelectedRm: (state, action: PayloadAction<App>) => {
+      state.apps_selected = state.apps_selected.filter(
+        (as) => as.GUID !== action.payload.GUID
+      );
+    },
+    appsSelectedAdd: (state, action: PayloadAction<App>) => {
+      state.apps_selected.push(action.payload);
     },
   },
 });

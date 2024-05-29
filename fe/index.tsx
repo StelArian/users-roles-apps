@@ -26,10 +26,10 @@ const App = () => (
       <div className="buttons">
         <div></div>
         <div style={{ textAlign: "left" }}>
-          <button>↘ Join selected to Users+Roles ↙</button>
+          <button>↘ Join selected to User+Role ↙</button>
         </div>
         <div style={{ textAlign: "right" }}>
-          <button>↘ Join selected to Roles+Apps ↙</button>
+          <button>↘ Join selected to Role+App ↙</button>
         </div>
         <div></div>
       </div>
