@@ -1,4 +1,4 @@
 node_modules/
 sqlite/
 dist/
-**/.parcel-cache/
+.parcel-cache/
