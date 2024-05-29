@@ -45,7 +45,9 @@ app.post("/users", async (req: Request, res: Response) => {
   const { FullName, PicturePath } = req.body;
 
   if (!FullName || !PicturePath) {
-    return res.status(400).json({ error: "Request missing FullName or PicturePath." });
+    return res
+      .status(400)
+      .json({ error: "Request missing FullName or PicturePath." });
   }
 
   try {
@@ -78,14 +80,61 @@ app.get("/users/:guid", async (req: Request, res: Response) => {
     res.json(user);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "An error occurred while fetching the user." });
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching the user." });
   }
 });
-app.put("/users/:guid", (req: Request, res: Response) => {
-  // Update a specific user
+
+app.put("/users/:guid", async (req: Request, res: Response) => {
+  const { guid } = req.params;
+  const { FullName, PicturePath } = req.body;
+
+  console.log(req.body);
+
+  if (!guid || !FullName || !PicturePath) {
+    return res
+      .status(400)
+      .json({ error: "Request missing user GUID or update fields." });
+  }
+
+  try {
+    const sql = "UPDATE users SET FullName = ?, PicturePath = ? WHERE GUID = ?";
+    await db.run(sql, [FullName, PicturePath, guid]);
+
+    res.status(200).json({ message: "User updated successfully." });
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ error: "An error occurred while updating the user." });
+  }
 });
-app.delete("/users/:guid", (req: Request, res: Response) => {
-  // Delete a specific user
+
+app.delete("/users/:guid", async (req: Request, res: Response) => {
+  const { guid } = req.params;
+
+  if (!guid) {
+    return res.status(400).json({ error: "Request missing user GUID." });
+  }
+
+  try {
+    const user = await db.get("SELECT * FROM users WHERE GUID = ?", [guid]);
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found." });
+    }
+
+    const sql = "DELETE FROM users WHERE GUID = ?";
+    await db.run(sql, [guid]);
+
+    res.status(200).json({ message: "User deleted successfully." });
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ error: "An error occurred while deleting the user." });
+  }
 });
 
 //  Role APIs
