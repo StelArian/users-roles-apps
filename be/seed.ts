@@ -99,6 +99,27 @@ async function seed(db: Database) {
     );
   `);
 
+  const roles = [
+    { GUID: uuidv4(), Name: "Ensign" },
+    { GUID: uuidv4(), Name: "Lieutenant Junior Grade" },
+    { GUID: uuidv4(), Name: "Lieutenant" },
+    { GUID: uuidv4(), Name: "Lieutenant Commander" },
+    { GUID: uuidv4(), Name: "Commander" },
+    { GUID: uuidv4(), Name: "Captain" },
+    { GUID: uuidv4(), Name: "Rear Admiral Lower Half" },
+    { GUID: uuidv4(), Name: "Rear Admiral Upper Half" },
+    { GUID: uuidv4(), Name: "Vice Admiral" },
+    { GUID: uuidv4(), Name: "Admiral" },
+    { GUID: uuidv4(), Name: "Fleet Admiral" },
+  ];
+
+  for (const role of roles) {
+    await db.run(`INSERT INTO Roles (GUID, Name) VALUES (?, ?)`, [
+      role.GUID,
+      role.Name,
+    ]);
+  }
+
   await db.run(`
     CREATE TABLE Apps (
       GUID TEXT PRIMARY KEY,
