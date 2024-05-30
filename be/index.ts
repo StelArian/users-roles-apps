@@ -5,7 +5,7 @@ import { existsSync } from "fs";
 import { v4 as uuidv4 } from "uuid";
 import fs from "fs";
 import cors from "cors";
-import { User, Role, App, UserRole } from "../common";
+import { User, Role, App, UserRole, RoleApp } from "../common";
 
 const config = JSON.parse(fs.readFileSync("config.json", "utf8"));
 
@@ -206,6 +206,36 @@ app.post("/user_role", async (req: Request, res: Response) => {
     const result = await db.run(
       `INSERT OR IGNORE INTO User_Role (UserGUID, RoleGUID) VALUES (?, ?)`,
       [pair.UserGUID, pair.RoleGUID]
+    );
+    if (result && result.changes !== undefined && result.changes > 0) {
+      successfulInserts++;
+    }
+  }
+  res.json({ successfulInserts });
+});
+
+//  Role App Pairs APIs
+app.get("/role_app", async (req: Request, res: Response) => {
+  try {
+    const roleApp: RoleApp[] = await db.all("SELECT * FROM Role_App");
+    res.json(roleApp);
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching role-app pairs." });
+  }
+});
+
+app.post("/role_app", async (req: Request, res: Response) => {
+  const roleAppPairs: RoleApp[] = req.body;
+
+  let successfulInserts = 0;
+
+  for (const pair of roleAppPairs) {
+    const result = await db.run(
+      `INSERT OR IGNORE INTO Role_App (RoleGUID, AppGUID) VALUES (?, ?)`,
+      [pair.RoleGUID, pair.AppGUID]
     );
     if (result && result.changes !== undefined && result.changes > 0) {
       successfulInserts++;

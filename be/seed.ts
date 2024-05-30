@@ -182,10 +182,10 @@ async function seed(db: Database) {
   await db.run(`
     CREATE TABLE Role_App (
       RoleGUID TEXT,
-      ApplicationGUID TEXT,
-      PRIMARY KEY(RoleGUID, ApplicationGUID),
+      AppGUID TEXT,
+      PRIMARY KEY(RoleGUID, AppGUID),
       FOREIGN KEY(RoleGUID) REFERENCES Role(GUID),
-      FOREIGN KEY(ApplicationGUID) REFERENCES Application(GUID)
+      FOREIGN KEY(AppGUID) REFERENCES App(GUID)
     );
   `);
 }

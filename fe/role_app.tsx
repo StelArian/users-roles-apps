@@ -5,14 +5,18 @@ import fs from "fs";
 
 const config = JSON.parse(fs.readFileSync("config.json", "utf8"));
 
+export const refreshRoleApp = (dispatch: AppDispatch) => {
+  fetch(`//${location.hostname}:${config.port.be}/role_app`)
+    .then((response) => response.json())
+    .then((data) => dispatch(actions.gotRoleApp(data)));
+};
+
 export default () => {
   const dispatch: AppDispatch = useDispatch();
   const role_app = useSelector((state: RootState) => state.props.role_app);
 
   useEffect(() => {
-    fetch(`//${location.hostname}:${config.port.be}/users`)
-      .then((response) => response.json())
-      .then((data) => dispatch(actions.gotUsers(data)));
+    refreshRoleApp(dispatch);
   }, []);
 
   return (

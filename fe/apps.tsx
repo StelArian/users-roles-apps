@@ -39,7 +39,7 @@ export default () => {
             <div title={app.GUID}>{app.GUID}</div>
             <div title={app.Name}>{app.Name}</div>
             <div title={app.IconPath}>{app.IconPath}</div>
-            <div title={app.URL}>{app.URL}</div>
+            <div title={app.URL}><a href={app.URL} target="_blank">{app.URL}</a></div>
             <div>
               <input
                 type="checkbox"
