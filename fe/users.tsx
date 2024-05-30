@@ -74,24 +74,26 @@ export default () => {
             <div title={user.GUID}>{user.GUID}</div>
             <div title={user.FullName}>{user.FullName}</div>
             <div title={user.PicturePath}>{user.PicturePath}</div>
-            <div>
-              <input
-                type="checkbox"
-                title="Select row"
+            <div className="actions">
+              <div>
+                <input
+                  type="checkbox"
+                  title="Select row"
+                  data-user={JSON.stringify(user)}
+                  onClick={handleCheckbox}
+                  checked={users_selected.some((su) => su.GUID === user.GUID)}
+                  onChange={() => {}}
+                />
+              </div>
+              <div
+                onClick={handleDelete}
                 data-user={JSON.stringify(user)}
-                onClick={handleCheckbox}
-                checked={users_selected.some((su) => su.GUID === user.GUID)}
-                onChange={() => {}}
-              />
+                title="Delete row"
+              >
+                🗑
+              </div>
+              {/* <div>✏️</div> */}
             </div>
-            <div
-              onClick={handleDelete}
-              data-user={JSON.stringify(user)}
-              title="Delete row"
-            >
-              🗑
-            </div>
-            {/* <div>✏️</div> */}
           </div>
         ))}
       </div>

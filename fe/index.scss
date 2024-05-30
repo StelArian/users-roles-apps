@@ -49,15 +49,20 @@ body {
         text-overflow: ellipsis;
 
         &:first-child {
-          flex: 2;
+          width: 5rem;
+          flex: none;
         }
 
-        &:nth-last-child(-n + 2) {
-          flex: 1;
+        &.actions {
+          width: 3rem;
+          flex: none;
           text-align: center;
-          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          column-gap: 0.4rem;
 
-          > input {
+          > * {
             cursor: pointer;
           }
         }

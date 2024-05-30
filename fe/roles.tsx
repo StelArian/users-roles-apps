@@ -10,17 +10,17 @@ const config = JSON.parse(fs.readFileSync("config.json", "utf8"));
 
 export const refreshRoles = (dispatch: AppDispatch) => {
   fetch(`//${location.hostname}:${config.port.be}/roles`)
-  .then((response) => {
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return response.json();
-  })
-  .then((data) => dispatch(actions.gotRoles(data)))
-  .catch((error) => {
-    console.error("Error:", error);
-    dispatch(actions.fetchFailed(error.message));
-  });
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => dispatch(actions.gotRoles(data)))
+    .catch((error) => {
+      console.error("Error:", error);
+      dispatch(actions.fetchFailed(error.message));
+    });
 };
 
 export default () => {
@@ -75,24 +75,26 @@ export default () => {
           <div key={role.GUID}>
             <div title={role.GUID}>{role.GUID}</div>
             <div title={role.Name}>{role.Name}</div>
-            <div>
-              <input
-                type="checkbox"
-                title="Select row"
+            <div className="actions">
+              <div>
+                <input
+                  type="checkbox"
+                  title="Select row"
+                  data-role={JSON.stringify(role)}
+                  onClick={handleCheckbox}
+                  checked={roles_selected.some((rs) => rs.GUID === role.GUID)}
+                  onChange={() => {}}
+                />
+              </div>
+              <div
+                onClick={handleDelete}
                 data-role={JSON.stringify(role)}
-                onClick={handleCheckbox}
-                checked={roles_selected.some((rs) => rs.GUID === role.GUID)}
-                onChange={() => {}}
-              />
+                title="Delete row"
+              >
+                🗑
+              </div>
+              {/* <div>✏️</div> */}
             </div>
-            <div
-              onClick={handleDelete}
-              data-role={JSON.stringify(role)}
-              title="Delete row"
-            >
-              🗑
-            </div>
-            {/* <div>✏️</div> */}
           </div>
         ))}
       </div>

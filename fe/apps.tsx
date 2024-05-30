@@ -79,24 +79,26 @@ export default () => {
                 {app.URL}
               </a>
             </div>
-            <div>
-              <input
-                type="checkbox"
-                title="Select row"
+            <div className="actions">
+              <div>
+                <input
+                  type="checkbox"
+                  title="Select row"
+                  data-app={JSON.stringify(app)}
+                  onClick={handleCheckbox}
+                  checked={apps_selected.some((sa) => sa.GUID === app.GUID)}
+                  onChange={() => {}}
+                />
+              </div>
+              <div
+                onClick={handleDelete}
                 data-app={JSON.stringify(app)}
-                onClick={handleCheckbox}
-                checked={apps_selected.some((sa) => sa.GUID === app.GUID)}
-                onChange={() => {}}
-              />
+                title="Delete row"
+              >
+                🗑
+              </div>
+              {/* <div>✏️</div> */}
             </div>
-            <div
-              onClick={handleDelete}
-              data-app={JSON.stringify(app)}
-              title="Delete row"
-            >
-              🗑
-            </div>
-            {/* <div>✏️</div> */}
           </div>
         ))}
       </div>
