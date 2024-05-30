@@ -18,6 +18,8 @@ This is a project named Users Roles Apps, currently at version 0.1.0
 
 You can change server and client ports editing `config.json`
 
+Run `yarn seed` whenever you desire to reset the SQL
+
 ## Known issues
 
 Create/edit users, roles and apps is not yet implement
