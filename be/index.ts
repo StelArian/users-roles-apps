@@ -157,8 +157,30 @@ app.get("/roles/:guid", (req: Request, res: Response) => {
 app.put("/roles/:guid", (req: Request, res: Response) => {
   // Update a specific role
 });
-app.delete("/roles/:guid", (req: Request, res: Response) => {
-  // Delete a specific role
+app.delete("/roles/:guid", async (req: Request, res: Response) => {
+  const { guid } = req.params;
+
+  if (!guid) {
+    return res.status(400).json({ error: "Request missing role GUID." });
+  }
+
+  try {
+    const role = await db.get("SELECT * FROM roles WHERE GUID = ?", [guid]);
+
+    if (!role) {
+      return res.status(404).json({ error: "Role not found." });
+    }
+
+    const sql = "DELETE FROM roles WHERE GUID = ?";
+    await db.run(sql, [guid]);
+
+    res.status(200).json({ message: "Role deleted successfully." });
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ error: "An error occurred while deleting the role." });
+  }
 });
 
 //  App APIs
@@ -171,17 +193,43 @@ app.get("/apps", async (req: Request, res: Response) => {
     res.status(500).json({ error: "An error occurred while fetching apps." });
   }
 });
-app.post("/applications", (req: Request, res: Response) => {
+
+app.post("/apps", (req: Request, res: Response) => {
   // Add a new application
 });
-app.get("/applications/:guid", (req: Request, res: Response) => {
+
+app.get("/apps/:guid", (req: Request, res: Response) => {
   // Fetch a specific application
 });
-app.put("/applications/:guid", (req: Request, res: Response) => {
+
+app.put("/apps/:guid", (req: Request, res: Response) => {
   // Update a specific application
 });
-app.delete("/applications/:guid", (req: Request, res: Response) => {
-  // Delete a specific application
+
+app.delete("/apps/:guid", async (req: Request, res: Response) => {
+  const { guid } = req.params;
+
+  if (!guid) {
+    return res.status(400).json({ error: "Request missing app GUID." });
+  }
+
+  try {
+    const app = await db.get("SELECT * FROM apps WHERE GUID = ?", [guid]);
+
+    if (!app) {
+      return res.status(404).json({ error: "App not found." });
+    }
+
+    const sql = "DELETE FROM apps WHERE GUID = ?";
+    await db.run(sql, [guid]);
+
+    res.status(200).json({ message: "App deleted successfully." });
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ error: "An error occurred while deleting the app." });
+  }
 });
 
 //  User Role Pairs APIs

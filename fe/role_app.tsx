@@ -59,7 +59,11 @@ export default () => {
           <div key={index}>
             <div title={pair.RoleGUID}>{pair.RoleGUID}</div>
             <div title={pair.AppGUID}>{pair.AppGUID}</div>
-            <div onClick={handleDelete} data-pair={JSON.stringify(pair)}>
+            <div
+              onClick={handleDelete}
+              data-pair={JSON.stringify(pair)}
+              title="Delete row"
+            >
               🗑
             </div>
           </div>

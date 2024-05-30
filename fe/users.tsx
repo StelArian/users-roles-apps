@@ -3,8 +3,24 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState, actions } from "./store";
 import fs from "fs";
 import { User } from "../common";
+import { refreshUserRole } from "./user_role";
 
 const config = JSON.parse(fs.readFileSync("config.json", "utf8"));
+
+export const refreshUsers = (dispatch: AppDispatch) => {
+  fetch(`//${location.hostname}:${config.port.be}/users`)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => dispatch(actions.gotUsers(data)))
+    .catch((error) => {
+      console.error("Error:", error);
+      dispatch(actions.fetchFailed(error.message));
+    });
+};
 
 export default () => {
   const dispatch: AppDispatch = useDispatch();
@@ -22,19 +38,29 @@ export default () => {
     }
   };
 
-  useEffect(() => {
-    fetch(`//${location.hostname}:${config.port.be}/users`)
+  const handleDelete = (e: React.MouseEvent<HTMLDivElement>) => {
+    const user: User = JSON.parse(e.currentTarget.dataset.user || "");
+    fetch(`//${location.hostname}:${config.port.be}/users/${user.GUID}`, {
+      method: "DELETE",
+    })
       .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         return response.json();
       })
-      .then((data) => dispatch(actions.gotUsers(data)))
+      .then((data) => {
+        refreshUsers(dispatch);
+        refreshUserRole(dispatch);
+      })
       .catch((error) => {
         console.error("Error:", error);
         dispatch(actions.fetchFailed(error.message));
       });
+  };
+
+  useEffect(() => {
+    refreshUsers(dispatch);
   }, []);
 
   return (
@@ -58,7 +84,13 @@ export default () => {
                 onChange={() => {}}
               />
             </div>
-            <div title="Delete row">🗑</div>
+            <div
+              onClick={handleDelete}
+              data-user={JSON.stringify(user)}
+              title="Delete row"
+            >
+              🗑
+            </div>
             {/* <div>✏️</div> */}
           </div>
         ))}

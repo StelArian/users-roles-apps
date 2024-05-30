@@ -3,8 +3,24 @@ import fs from "fs";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState, actions } from "./store";
 import { App } from "../common";
+import { refreshRoleApp } from "./role_app";
 
 const config = JSON.parse(fs.readFileSync("config.json", "utf8"));
+
+export const refreshApps = (dispatch: AppDispatch) => {
+  fetch(`//${location.hostname}:${config.port.be}/apps`)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => dispatch(actions.gotApps(data)))
+    .catch((error) => {
+      console.error("Error:", error);
+      dispatch(actions.fetchFailed(error.message));
+    });
+};
 
 export default () => {
   const dispatch: AppDispatch = useDispatch();
@@ -22,19 +38,29 @@ export default () => {
     }
   };
 
-  useEffect(() => {
-    fetch(`//${location.hostname}:${config.port.be}/apps`)
+  const handleDelete = (e: React.MouseEvent<HTMLDivElement>) => {
+    const app: App = JSON.parse(e.currentTarget.dataset.app || "");
+    fetch(`//${location.hostname}:${config.port.be}/apps/${app.GUID}`, {
+      method: "DELETE",
+    })
       .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         return response.json();
       })
-      .then((data) => dispatch(actions.gotApps(data)))
+      .then((data) => {
+        refreshApps(dispatch);
+        refreshRoleApp(dispatch);
+      })
       .catch((error) => {
         console.error("Error:", error);
         dispatch(actions.fetchFailed(error.message));
       });
+  };
+
+  useEffect(() => {
+    refreshApps(dispatch);
   }, []);
 
   return (
@@ -63,7 +89,13 @@ export default () => {
                 onChange={() => {}}
               />
             </div>
-            <div title="Delete row">🗑</div>
+            <div
+              onClick={handleDelete}
+              data-app={JSON.stringify(app)}
+              title="Delete row"
+            >
+              🗑
+            </div>
             {/* <div>✏️</div> */}
           </div>
         ))}
