@@ -23,7 +23,7 @@ open({
   driver: sqlite3.Database,
 }).then((database) => {
   db = database;
-  console.log("Connected to the sqlite database.");
+  console.log("Connected to the sqlite database");
 });
 
 const app = express();
@@ -126,6 +126,9 @@ app.delete("/users/:guid", async (req: Request, res: Response) => {
       return res.status(404).json({ error: "User not found." });
     }
 
+    const sqlUserRole = "DELETE FROM user_role WHERE UserGUID = ?";
+    await db.run(sqlUserRole, [guid]);
+
     const sql = "DELETE FROM users WHERE GUID = ?";
     await db.run(sql, [guid]);
 
@@ -170,6 +173,12 @@ app.delete("/roles/:guid", async (req: Request, res: Response) => {
     if (!role) {
       return res.status(404).json({ error: "Role not found." });
     }
+
+    const sqlUserRole = "DELETE FROM user_role WHERE RoleGUID = ?";
+    await db.run(sqlUserRole, [guid]);
+
+    const sqlRoleApp = "DELETE FROM role_app WHERE RoleGUID = ?";
+    await db.run(sqlRoleApp, [guid]);
 
     const sql = "DELETE FROM roles WHERE GUID = ?";
     await db.run(sql, [guid]);
@@ -219,6 +228,9 @@ app.delete("/apps/:guid", async (req: Request, res: Response) => {
     if (!app) {
       return res.status(404).json({ error: "App not found." });
     }
+
+    const sqlRoleApp = "DELETE FROM role_app WHERE AppGUID = ?";
+    await db.run(sqlRoleApp, [guid]);
 
     const sql = "DELETE FROM apps WHERE GUID = ?";
     await db.run(sql, [guid]);
