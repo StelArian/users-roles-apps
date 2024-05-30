@@ -92,7 +92,7 @@ export default () => {
               >
                 🗑
               </div>
-              {/* <div>✏️</div> */}
+              <div title="Edit row (WiP)">✏️</div>
             </div>
           </div>
         ))}
