@@ -40,7 +40,7 @@ export default () => {
   return (
     <div className="dataTable">
       <h1>
-        Apps<span title="Add app">+</span>
+        Apps<span title="Add app (WiP)">+</span>
       </h1>
       <div>
         {apps.map((app) => (
@@ -56,15 +56,15 @@ export default () => {
             <div>
               <input
                 type="checkbox"
+                title="Select row"
                 data-app={JSON.stringify(app)}
                 onClick={handleCheckbox}
                 checked={apps_selected.some((sa) => sa.GUID === app.GUID)}
                 onChange={() => {}}
               />
             </div>
-            <div>🗑</div>
-            <div>✏️</div>
-            {/* TODO: launch app rocket */}
+            <div title="Delete row">🗑</div>
+            {/* <div>✏️</div> */}
           </div>
         ))}
       </div>

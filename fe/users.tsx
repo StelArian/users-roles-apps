@@ -40,7 +40,7 @@ export default () => {
   return (
     <div className="dataTable">
       <h1>
-        Users<span title="Add user">+</span>
+        Users<span title="Add user (WiP)">+</span>
       </h1>
       <div>
         {users.map((user) => (
@@ -51,14 +51,15 @@ export default () => {
             <div>
               <input
                 type="checkbox"
+                title="Select row"
                 data-user={JSON.stringify(user)}
                 onClick={handleCheckbox}
                 checked={users_selected.some((su) => su.GUID === user.GUID)}
                 onChange={() => {}}
               />
             </div>
-            <div>🗑</div>
-            <div>✏️</div>
+            <div title="Delete row">🗑</div>
+            {/* <div>✏️</div> */}
           </div>
         ))}
       </div>

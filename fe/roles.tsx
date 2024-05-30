@@ -40,7 +40,7 @@ export default () => {
   return (
     <div className="dataTable">
       <h1>
-        Roles<span title="Add role">+</span>
+        Roles<span title="Add role (WiP)">+</span>
       </h1>
       <div>
         {roles.map((role) => (
@@ -50,14 +50,15 @@ export default () => {
             <div>
               <input
                 type="checkbox"
+                title="Select row"
                 data-role={JSON.stringify(role)}
                 onClick={handleCheckbox}
                 checked={roles_selected.some((rs) => rs.GUID === role.GUID)}
                 onChange={() => {}}
               />
             </div>
-            <div>🗑</div>
-            <div>✏️</div>
+            <div title="Delete row">🗑</div>
+            {/* <div>✏️</div> */}
           </div>
         ))}
       </div>
