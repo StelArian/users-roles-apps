@@ -7,8 +7,17 @@ const config = JSON.parse(fs.readFileSync("config.json", "utf8"));
 
 export const refreshUserRole = (dispatch: AppDispatch) => {
   fetch(`//${location.hostname}:${config.port.be}/user_role`)
-    .then((response) => response.json())
-    .then((data) => dispatch(actions.gotUserRole(data)));
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => dispatch(actions.gotUserRole(data)))
+    .catch((error) => {
+      console.error("Error:", error);
+      dispatch(actions.fetchFailed(error.message));
+    });
 };
 
 export default () => {

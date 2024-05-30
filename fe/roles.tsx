@@ -24,8 +24,17 @@ export default () => {
 
   useEffect(() => {
     fetch(`//${location.hostname}:${config.port.be}/roles`)
-      .then((response) => response.json())
-      .then((data) => dispatch(actions.gotRoles(data)));
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => dispatch(actions.gotRoles(data)))
+      .catch((error) => {
+        console.error("Error:", error);
+        dispatch(actions.fetchFailed(error.message));
+      });
   }, []);
 
   return (

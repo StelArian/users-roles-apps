@@ -11,6 +11,7 @@ interface propsState {
   apps_selected: App[];
   user_role: UserRole[];
   role_app: RoleApp[];
+  error: string;
 }
 
 const initialState: propsState = {
@@ -22,6 +23,7 @@ const initialState: propsState = {
   apps_selected: [],
   user_role: [],
   role_app: [],
+  error: "",
 };
 
 const propsSlice = createSlice({
@@ -67,6 +69,9 @@ const propsSlice = createSlice({
     appsSelectedAdd: (state, action: PayloadAction<App>) => {
       state.apps_selected.push(action.payload);
     },
+    fetchFailed: (state, action: PayloadAction<string>) => {
+      state.error = action.payload;
+    }
   },
 });
 

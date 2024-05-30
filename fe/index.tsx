@@ -10,10 +10,14 @@ import ButtonRoleApp from "./button_role_app";
 import UserRole from "./user_role";
 import RoleApp from "./role_app";
 import { store } from "./store";
+import Error from "./error";
 
 const App = () => (
   <Provider store={store}>
     <div>
+      <div className="error">
+        <Error />
+      </div>
       <div className="lists">
         <div>
           <Users />

@@ -1,5 +1,5 @@
 import React from "react";
-import { AppDispatch, RootState } from "./store";
+import { AppDispatch, RootState, actions } from "./store";
 import { useDispatch, useSelector } from "react-redux";
 import { RoleApp } from "../common";
 import fs from "fs";
@@ -31,12 +31,18 @@ export default () => {
         },
         body: JSON.stringify(roleAppPairs),
       })
-        .then((response) => response.json())
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
+        })
         .then((data) => {
           refreshRoleApp(dispatch);
         })
         .catch((error) => {
           console.error("Error:", error);
+          dispatch(actions.fetchFailed(error.message));
         });
     }
   };

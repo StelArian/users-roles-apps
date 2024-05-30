@@ -24,8 +24,17 @@ export default () => {
 
   useEffect(() => {
     fetch(`//${location.hostname}:${config.port.be}/apps`)
-      .then((response) => response.json())
-      .then((data) => dispatch(actions.gotApps(data)));
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => dispatch(actions.gotApps(data)))
+      .catch((error) => {
+        console.error("Error:", error);
+        dispatch(actions.fetchFailed(error.message));
+      });
   }, []);
 
   return (
@@ -39,7 +48,11 @@ export default () => {
             <div title={app.GUID}>{app.GUID}</div>
             <div title={app.Name}>{app.Name}</div>
             <div title={app.IconPath}>{app.IconPath}</div>
-            <div title={app.URL}><a href={app.URL} target="_blank">{app.URL}</a></div>
+            <div title={app.URL}>
+              <a href={app.URL} target="_blank">
+                {app.URL}
+              </a>
+            </div>
             <div>
               <input
                 type="checkbox"

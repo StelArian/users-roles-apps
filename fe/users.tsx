@@ -9,11 +9,13 @@ const config = JSON.parse(fs.readFileSync("config.json", "utf8"));
 export default () => {
   const dispatch: AppDispatch = useDispatch();
   const users = useSelector((state: RootState) => state.props.users);
-  const users_selected = useSelector((state: RootState) => state.props.users_selected);
+  const users_selected = useSelector(
+    (state: RootState) => state.props.users_selected
+  );
 
   const handleCheckbox = (e: React.MouseEvent<HTMLInputElement>) => {
-    const user: User = JSON.parse(e.currentTarget.dataset.user || '');
-    if (users_selected.some(us => us.GUID === user.GUID)) {
+    const user: User = JSON.parse(e.currentTarget.dataset.user || "");
+    if (users_selected.some((us) => us.GUID === user.GUID)) {
       dispatch(actions.usersSelectedRm(user));
     } else {
       dispatch(actions.usersSelectedAdd(user));
@@ -22,8 +24,17 @@ export default () => {
 
   useEffect(() => {
     fetch(`//${location.hostname}:${config.port.be}/users`)
-      .then((response) => response.json())
-      .then((data) => dispatch(actions.gotUsers(data)));
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => dispatch(actions.gotUsers(data)))
+      .catch((error) => {
+        console.error("Error:", error);
+        dispatch(actions.fetchFailed(error.message));
+      });
   }, []);
 
   return (
@@ -42,7 +53,7 @@ export default () => {
                 type="checkbox"
                 data-user={JSON.stringify(user)}
                 onClick={handleCheckbox}
-                checked={users_selected.some(su => su.GUID === user.GUID)}
+                checked={users_selected.some((su) => su.GUID === user.GUID)}
                 onChange={() => {}}
               />
             </div>
