@@ -5,6 +5,8 @@ import "./index.scss";
 import Users from "./users";
 import Roles from "./roles";
 import Apps from "./apps";
+import ButtonUserRole from "./button_user_role";
+import ButtonRoleApp from "./button_role_app";
 import UserRole from "./user_role";
 import RoleApp from "./role_app";
 import { store } from "./store";
@@ -26,10 +28,10 @@ const App = () => (
       <div className="buttons">
         <div></div>
         <div style={{ textAlign: "left" }}>
-          <button>↘ Join selected to User+Role ↙</button>
+          <ButtonUserRole />
         </div>
         <div style={{ textAlign: "right" }}>
-          <button>↘ Join selected to Role+App ↙</button>
+          <ButtonRoleApp />
         </div>
         <div></div>
       </div>

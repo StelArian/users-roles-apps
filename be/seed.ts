@@ -133,31 +133,31 @@ async function seed(db: Database) {
     {
       GUID: uuidv4(),
       Name: "USS Enterprise (NCC-1701)",
-      IconPath: "/path/to/enterprise.jpg",
+      IconPath: "enterprise.jpg",
       URL: "https://en.wikipedia.org/wiki/USS_Enterprise_(NCC-1701)",
     },
     {
       GUID: uuidv4(),
       Name: "USS Enterprise (NCC-1701-D)",
-      IconPath: "/path/to/enterprise_d.jpg",
+      IconPath: "enterprise_d.jpg",
       URL: "https://en.wikipedia.org/wiki/USS_Enterprise_(NCC-1701-D)",
     },
     {
       GUID: uuidv4(),
       Name: "USS Voyager (NCC-74656)",
-      IconPath: "/path/to/voyager.jpg",
+      IconPath: "voyager.jpg",
       URL: "https://en.wikipedia.org/wiki/USS_Voyager_(Star_Trek)",
     },
     {
       GUID: uuidv4(),
       Name: "USS Defiant (NX-74205)",
-      IconPath: "/path/to/defiant.jpg",
+      IconPath: "defiant.jpg",
       URL: "https://en.wikipedia.org/wiki/USS_Defiant",
     },
     {
       GUID: uuidv4(),
       Name: "USS Discovery (NCC-1031)",
-      IconPath: "/path/to/discovery.jpg",
+      IconPath: "discovery.jpg",
       URL: "https://en.wikipedia.org/wiki/USS_Discovery_(Star_Trek)",
     },
   ];

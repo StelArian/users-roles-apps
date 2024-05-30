@@ -3,11 +3,11 @@ import express, { Request, Response } from "express";
 import * as sqlite3 from "sqlite3";
 import { existsSync } from "fs";
 import { v4 as uuidv4 } from "uuid";
-import fs from 'fs';
-import cors from 'cors';
-import { User, Role, App } from "../common";
+import fs from "fs";
+import cors from "cors";
+import { User, Role, App, UserRole } from "../common";
 
-const config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
+const config = JSON.parse(fs.readFileSync("config.json", "utf8"));
 
 // Open the database
 const dbPath = "./be/sqlite/data.db";
@@ -59,7 +59,7 @@ app.post("/users", async (req: Request, res: Response) => {
     res
       .status(500)
       .json({ error: "An error occurred while creating the user." });
-      // TODO: for simplicity GUID collision is not handled.
+    // TODO: for simplicity GUID collision is not handled.
   }
 });
 
@@ -184,4 +184,36 @@ app.delete("/applications/:guid", (req: Request, res: Response) => {
   // Delete a specific application
 });
 
-app.listen(config.port.be, () => console.log(`Server running on port ${config.port.be}`));
+//  User Role Pairs APIs
+app.get("/user_role", async (req: Request, res: Response) => {
+  try {
+    const userRoles: UserRole[] = await db.all("SELECT * FROM User_Role");
+    res.json(userRoles);
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching user-role pairs." });
+  }
+});
+
+app.post("/user_role", async (req: Request, res: Response) => {
+  const userRolePairs: UserRole[] = req.body;
+
+  let successfulInserts = 0;
+
+  for (const pair of userRolePairs) {
+    const result = await db.run(
+      `INSERT OR IGNORE INTO User_Role (UserGUID, RoleGUID) VALUES (?, ?)`,
+      [pair.UserGUID, pair.RoleGUID]
+    );
+    if (result && result.changes !== undefined && result.changes > 0) {
+      successfulInserts++;
+    }
+  }
+  res.json({ successfulInserts });
+});
+
+app.listen(config.port.be, () =>
+  console.log(`Server running on port ${config.port.be}`)
+);
