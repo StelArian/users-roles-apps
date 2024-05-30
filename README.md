@@ -17,3 +17,7 @@ This is a project named Users Roles Apps, currently at version 0.1.0
 1. Open your browser to http://localhost:3080
 
 You can change server and client ports editing `config.json`
+
+## Known issues
+
+Create/edit users, roles and apps is not yet implement
