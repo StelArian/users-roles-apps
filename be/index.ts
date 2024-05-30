@@ -214,6 +214,37 @@ app.post("/user_role", async (req: Request, res: Response) => {
   res.json({ successfulInserts });
 });
 
+app.delete("/user_role", async (req: Request, res: Response) => {
+  const { UserGUID, RoleGUID } = req.body;
+
+  if (!UserGUID || !RoleGUID) {
+    return res
+      .status(400)
+      .json({ error: "Request missing UserGUID or RoleGUID." });
+  }
+
+  try {
+    const userRole = await db.get(
+      "SELECT * FROM User_Role WHERE UserGUID = ? AND RoleGUID = ?",
+      [UserGUID, RoleGUID]
+    );
+
+    if (!userRole) {
+      return res.status(404).json({ error: "User-Role pair not found." });
+    }
+
+    const sql = "DELETE FROM User_Role WHERE UserGUID = ? AND RoleGUID = ?";
+    await db.run(sql, [UserGUID, RoleGUID]);
+
+    res.status(200).json({ message: "User-Role pair deleted successfully." });
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ error: "An error occurred while deleting the user-role pair." });
+  }
+});
+
 //  Role App Pairs APIs
 app.get("/role_app", async (req: Request, res: Response) => {
   try {
@@ -224,6 +255,37 @@ app.get("/role_app", async (req: Request, res: Response) => {
     res
       .status(500)
       .json({ error: "An error occurred while fetching role-app pairs." });
+  }
+});
+
+app.delete("/role_app", async (req: Request, res: Response) => {
+  const { RoleGUID, AppGUID } = req.body;
+
+  if (!RoleGUID || !AppGUID) {
+    return res
+      .status(400)
+      .json({ error: "Request missing RoleGUID or AppGUID." });
+  }
+
+  try {
+    const roleApp = await db.get(
+      "SELECT * FROM Role_App WHERE RoleGUID = ? AND AppGUID = ?",
+      [RoleGUID, AppGUID]
+    );
+
+    if (!roleApp) {
+      return res.status(404).json({ error: "Role-App pair not found." });
+    }
+
+    const sql = "DELETE FROM Role_App WHERE RoleGUID = ? AND AppGUID = ?";
+    await db.run(sql, [RoleGUID, AppGUID]);
+
+    res.status(200).json({ message: "Role-App pair deleted successfully." });
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ error: "An error occurred while deleting the role-app pair." });
   }
 });
 
